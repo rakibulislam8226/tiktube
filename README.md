@@ -4,13 +4,13 @@ A Django-powered video sharing platform with user authentication, video upload, 
 
 ## Features
 
-- 🎥 Video upload and streaming
-- 👤 User authentication (login/signup)
-- 👍 Like/Dislike functionality with toggle
-- 💬 Comment system
-- 📱 Responsive design with Bootstrap
-- 🔍 Video search functionality
-- 📄 Pagination
+- Video upload and streaming
+- User authentication (login/signup)
+-ike/Dislike functionality with toggle
+- Comment system
+- Responsive design with Bootstrap
+- Video search functionality
+- Pagination
 
 ## Tech Stack
 
