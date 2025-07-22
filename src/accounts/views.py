@@ -123,3 +123,46 @@ def profile_edit_view(request):
         form = ProfileEditForm(instance=user_profile, user=request.user)
 
     return render(request, "accounts/profile_edit.html", {"form": form})
+
+
+def user_profile_view(request, username):
+    try:
+        profile_user = User.objects.get(username=username)
+    except User.DoesNotExist:
+        return render(request, "accounts/user_not_found.html", {"username": username})
+
+    try:
+        user_profile = UserProfile.objects.get(user=profile_user)
+    except UserProfile.DoesNotExist:
+        # Create a profile if it doesn't exist
+        user_profile = UserProfile.objects.create(
+            user=profile_user,
+            username=profile_user.username,
+            description="",
+        )
+
+    # Get all videos uploaded by this user
+    from videos.models import Video
+
+    user_videos = Video.objects.filter(user=profile_user).order_by("-created")
+
+    # Calculate likes percentage for each video
+    likes_percent = {}
+    for video in user_videos:
+        total_ratings = video.likes + video.dislikes
+        if total_ratings > 0:
+            likes_percent[video.id] = (video.likes / total_ratings) * 100
+        else:
+            likes_percent[video.id] = 0
+
+    context = {
+        "profile_user": profile_user,
+        "user_profile": user_profile,
+        "user_videos": user_videos,
+        "likes_percent": likes_percent,
+        "total_videos": user_videos.count(),
+        "total_views": sum(video.views for video in user_videos),
+        "total_likes": sum(video.likes for video in user_videos),
+    }
+
+    return render(request, "accounts/user_profile.html", context)

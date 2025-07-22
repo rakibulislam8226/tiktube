@@ -42,7 +42,11 @@
                                 </div>
                             {% endif %}
                             <div>
-                                <h6 class="mb-0">{{ video.user.username }}</h6>
+                                <h6 class="mb-0">
+                                    <a href="{% url 'user_profile' video.user.username %}" class="text-decoration-none text-dark">
+                                        {{ video.user.username }}
+                                    </a>
+                                </h6>
                                 <small class="text-muted"><i class="bi bi-eye"></i> {{ video.views }} views</small>
                             </div>
                         </div>
@@ -107,7 +111,11 @@
                                 </div>
                             {% endif %}
                             <div class="flex-grow-1">
-                                <h6 class="mb-1">{{ comment.user.username }}</h6>
+                                <h6 class="mb-1">
+                                    <a href="{% url 'user_profile' comment.user.username %}" class="text-decoration-none text-dark">
+                                        {{ comment.user.username }}
+                                    </a>
+                                </h6>
                                 <p class="mb-2">{{ comment.comment }}</p>
                                 
                                 <!-- Comment Actions -->
@@ -181,7 +189,11 @@
                                     {{ rec_video.title|truncatewords:6 }}
                                 </a>
                             </h6>
-                            <small class="text-muted d-block">{{ rec_video.user.username }}</small>
+                            <small class="text-muted d-block">
+                                <a href="{% url 'user_profile' rec_video.user.username %}" class="text-decoration-none text-muted">
+                                    {{ rec_video.user.username }}
+                                </a>
+                            </small>
                             <small class="text-muted">
                                 <i class="bi bi-eye"></i> {{ rec_video.views }} views
                                 <span class="ms-2"><i class="bi bi-hand-thumbs-up"></i> {{ rec_video.likes }}</span>

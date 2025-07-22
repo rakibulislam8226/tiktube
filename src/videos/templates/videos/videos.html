@@ -35,7 +35,11 @@
                     <!-- User Info -->
                     <div class="d-flex align-items-center mb-2">
                         <i class="bi bi-person-circle me-2"></i>
-                        <small class="text-muted">{{ query.user.username }}</small>
+                        <small class="text-muted">
+                            <a href="{% url 'user_profile' query.user.username %}" class="text-decoration-none">
+                                {{ query.user.username }}
+                            </a>
+                        </small>
                     </div>
                     
                     <!-- Likes Progress Bar -->
