@@ -9,7 +9,7 @@
             <div class="card mb-4">
                 <div class="card-body">
                     <div class="row align-items-center">
-                        <div class="col-md-3 text-center">
+                        <div class="col-md-4 text-center">
                             {% if user_profile.picture %}
                                 <img src="{{ user_profile.picture.url }}" alt="Profile Picture" class="img-fluid rounded-circle mb-3 profile-image-large" style="width: 150px; height: 150px; object-fit: cover;">
                             {% else %}
@@ -18,7 +18,7 @@
                                 </div>
                             {% endif %}
                         </div>
-                        <div class="col-md-6">
+                        <div class="col-md-4">
                             <h2 class="mb-2">{{ profile_user.username }}</h2>
                             {% if profile_user.first_name or profile_user.last_name %}
                                 <h5 class="text-muted mb-3">{{ profile_user.first_name }} {{ profile_user.last_name }}</h5>
@@ -32,8 +32,8 @@
                                 <i class="bi bi-calendar"></i> Member since {{ profile_user.date_joined|date:"F Y" }}
                             </small>
                         </div>
-                        <div class="col-md-3">
-                            <div class="row text-center stats-container">
+                        <div class="col-lg-4">
+                            <div class="row text-center">
                                 <div class="col-4">
                                     <div class="card stats-card text-white">
                                         <div class="card-body">

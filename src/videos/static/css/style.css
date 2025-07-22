@@ -140,12 +140,6 @@
     .video-grid {
         grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
     }
-    
-    .stats-container {
-        display: grid;
-        grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
-        gap: 1rem;
-    }
 }
 
 @media(max-width:768px){
@@ -159,11 +153,6 @@
     
     .container-fluid {
         padding: 0 15px;
-    }
-    
-    .stats-container {
-        grid-template-columns: repeat(3, 1fr);
-        gap: 0.5rem;
     }
 }
 
