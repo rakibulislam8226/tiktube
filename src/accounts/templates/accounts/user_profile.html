@@ -11,9 +11,9 @@
                     <div class="row align-items-center">
                         <div class="col-md-3 text-center">
                             {% if user_profile.picture %}
-                                <img src="{{ user_profile.picture.url }}" alt="Profile Picture" class="img-fluid rounded-circle mb-3" style="width: 150px; height: 150px; object-fit: cover;">
+                                <img src="{{ user_profile.picture.url }}" alt="Profile Picture" class="img-fluid rounded-circle mb-3 profile-image-large" style="width: 150px; height: 150px; object-fit: cover;">
                             {% else %}
-                                <div class="bg-secondary rounded-circle mx-auto mb-3 d-flex align-items-center justify-content-center text-white" style="width: 150px; height: 150px; font-size: 60px;">
+                                <div class="bg-secondary rounded-circle mx-auto mb-3 d-flex align-items-center justify-content-center text-white profile-image-large" style="width: 150px; height: 150px; font-size: 60px;">
                                     {{ profile_user.username|slice:":1"|upper }}
                                 </div>
                             {% endif %}
@@ -33,9 +33,9 @@
                             </small>
                         </div>
                         <div class="col-md-3">
-                            <div class="row text-center">
+                            <div class="row text-center stats-container">
                                 <div class="col-4">
-                                    <div class="card bg-primary text-white">
+                                    <div class="card stats-card text-white">
                                         <div class="card-body">
                                             <h4 class="card-title">{{ total_videos }}</h4>
                                             <p class="card-text">Videos</p>
@@ -43,7 +43,7 @@
                                     </div>
                                 </div>
                                 <div class="col-4">
-                                    <div class="card bg-success text-white">
+                                    <div class="card stats-card text-white">
                                         <div class="card-body">
                                             <h4 class="card-title">{{ total_views }}</h4>
                                             <p class="card-text">Views</p>
@@ -51,7 +51,7 @@
                                     </div>
                                 </div>
                                 <div class="col-4">
-                                    <div class="card bg-danger text-white">
+                                    <div class="card stats-card text-white">
                                         <div class="card-body">
                                             <h4 class="card-title">{{ total_likes }}</h4>
                                             <p class="card-text">Likes</p>
@@ -70,7 +70,7 @@
                     <h4 class="mb-0">
                         <i class="bi bi-play-circle"></i> 
                         Videos by {{ profile_user.username }} 
-                        <span class="badge bg-primary">{{ total_videos }}</span>
+                        <span class="badge badge-professional">{{ total_videos }}</span>
                     </h4>
                 </div>
                 <div class="card-body">
@@ -78,16 +78,16 @@
                         <div class="row">
                             {% for video in user_videos %}
                             <div class="col-lg-4 col-md-6 col-sm-12 mb-4">
-                                <div class="card h-100 shadow-sm">
+                                <div class="card h-100 shadow-sm video-card">
                                     <!-- Video Thumbnail -->
                                     <div class="position-relative">
                                         <a href="{% url 'detail' video.id %}">
                                             <img src="{{ video.thumbnail.url }}" class="card-img-top" style="height: 200px; object-fit: cover;" alt="{{ video.title }}">
                                         </a>
-                                        <span class="badge bg-dark position-absolute top-0 end-0 m-2">
+                                        <span class="badge badge-professional position-absolute top-0 end-0 m-2">
                                             <i class="bi bi-eye"></i> {{ video.views }}
                                         </span>
-                                        <span class="badge bg-info position-absolute top-0 start-0 m-2">
+                                        <span class="badge bg-secondary position-absolute top-0 start-0 m-2">
                                             {{ video.created|date:"M d, Y" }}
                                         </span>
                                     </div>
