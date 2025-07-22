@@ -1,70 +1,81 @@
 {% extends 'videos/base.html' %}
 {% block content %}
 
-
-<form method="POST" action="{% url 'upload' %}" enctype="multipart/form-data">
-  {% csrf_token %}
-  <div class="container-2">
-
-    <div class="container-2-box">
-
-    </div>
-    <div class="container-2-box">
-      <div class='container-3'>
-        <div class='container-3-box'>
-
-              <div class="ui fluid segment">
-                <div class = 'center'>
-                  <label for="hidden-new-file" class="ui icon button ui huge teal floated" style='width:350px;'>
-                    <i class="ui upload icon"></i>
-                    Upload Video
-                  </label>
-                  <input type="file" id="hidden-new-file" style="display: none" name='video'>
-                </div>
-
-                <div class = 'center'>
-                  <label for="hidden-new-file2" class="ui icon button huge purple floated" style='width:350px; margin-top:15px;'>
-                    <i class="ui upload icon"></i>
-                    Upload Thumbnail
-                  </label>
-                  <input type="file" id="hidden-new-file2" style="display: none" name='thumbnail'>
-                </div>
-              </div>
-
-          <div class="ui form">
-            <div class="field">
-              <label>Title</label>
-              <input type="text" name="title">
+<div class="row justify-content-center">
+    <div class="col-md-8">
+        <div class="card shadow">
+            <div class="card-header bg-success text-white">
+                <h3 class="mb-0"><i class="bi bi-cloud-upload"></i> Upload New Video</h3>
             </div>
+            <div class="card-body">
+                <form method="POST" action="{% url 'upload' %}" enctype="multipart/form-data">
+                    {% csrf_token %}
+                    
+                    <!-- File Upload Section -->
+                    <div class="row mb-4">
+                        <div class="col-md-6">
+                            <div class="mb-3">
+                                <label class="form-label fw-bold">Video File</label>
+                                <div class="upload-area border border-2 border-dashed border-primary rounded p-4 text-center bg-light">
+                                    <i class="bi bi-camera-video display-4 text-primary mb-3"></i>
+                                    <p class="mb-2">Click to upload your video</p>
+                                    <input type="file" class="form-control" name="video" accept="video/*" required>
+                                    <small class="text-muted">Supported formats: MP4, AVI, MOV</small>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="mb-3">
+                                <label class="form-label fw-bold">Thumbnail Image</label>
+                                <div class="upload-area border border-2 border-dashed border-secondary rounded p-4 text-center bg-light">
+                                    <i class="bi bi-image display-4 text-secondary mb-3"></i>
+                                    <p class="mb-2">Click to upload thumbnail</p>
+                                    <input type="file" class="form-control" name="thumbnail" accept="image/*" required>
+                                    <small class="text-muted">Supported formats: JPG, PNG, GIF</small>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
 
-            <div class="ui form">
-              <div class="field">
-                <label>Description</label>
-                <textarea style="margin-top: 0px; margin-bottom: 0px; height: 165px;" name='description'></textarea>
-              </div>
+                    <!-- Video Details Section -->
+                    <div class="mb-3">
+                        <label for="title" class="form-label fw-bold">Video Title</label>
+                        <input type="text" class="form-control" id="title" name="title" placeholder="Enter an engaging title for your video" required>
+                    </div>
+
+                    <div class="mb-4">
+                        <label for="description" class="form-label fw-bold">Description</label>
+                        <textarea class="form-control" id="description" name="description" rows="5" placeholder="Describe your video content..." required></textarea>
+                    </div>
+
+                    <!-- Action Buttons -->
+                    <div class="d-grid gap-2 d-md-flex justify-content-md-end">
+                        <a href="{% url 'videos' %}" class="btn btn-secondary me-md-2">
+                            <i class="bi bi-arrow-left"></i> Cancel
+                        </a>
+                        <button type="submit" class="btn btn-success" name="submitbutton">
+                            <i class="bi bi-cloud-upload"></i> Upload Video
+                        </button>
+                    </div>
+                </form>
             </div>
-
-
-
-            <button class="ui gray button" type='submit' style='height:65px;width:150px;' name='submitbutton'>Upload</button>
-          </div>
-
-
         </div>
-        <div class='container-3-box'>
-
-        </div>
-      </div>
     </div>
+</div>
 
-    <div class="container-2-box">
-
-    </div>
-  </div>
-
-
-
-
-</form>
+<style>
+    .upload-area {
+        transition: all 0.3s ease;
+        cursor: pointer;
+    }
+    .upload-area:hover {
+        background-color: #f8f9fa !important;
+        border-color: #0d6efd !important;
+    }
+    .upload-area input[type="file"] {
+        border: none;
+        background: transparent;
+    }
+</style>
 
 {% endblock %}

@@ -1,271 +1,216 @@
 {% extends 'videos/base.html' %}
 
-<!-- VIDEO.JS CSS -->
-<link rel='stylesheet' href='https://vjs.zencdn.net/4.12/video-js.css'>
-
-
 {% block content %}
+<!-- Video.js CSS -->
+<link rel='stylesheet' href='https://vjs.zencdn.net/7.21.1/video-js.css'>
 
-
-<!--<video id="vid1" src="{{video.video.url}}" autoplay controls="true" class="video-js vjs-default-skin vjs-big-play-centered" width="640" height="360" preload="auto" ></video> -->
-<script src='https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js'></script>
-<script src='https://vjs.zencdn.net/4.12/video.js'></script>
-
-<!--  VIDEO PLAYER -->
-<div class='container-2'>
-
-  <div class="box-2">
-    <div class="wrapper">
-      <div class="videocontent">
-        <video id="vid1" src="{{video.video.url}}" autoplay controls="true" class="video-js vjs-default-skin vjs-4-3 vjs-big-play-centered center  " width="1080" height="610" preload="auto" data-setup='{"fluid": true}'>
-
-        </video>
-      </div>
-    </div>
-
-  </div>
-
-  <!--  RECOMMENDATIONS -->
-  <div class="box-3">
-    <div class='container-2'>
-
-      <div class="inner_container recommendations">
-        {% for video in recentvideos %}
-        <div class="container-3-box">
-          <div class='ui raised segment'> <a class="ui teal left ribbon label"> {{video.likes}}</a>
-            <div class='container-2'>
-              <p><a href = "{% url 'detail' video.id %}"><img src='{{video.thumbnail.url}}' height=100 width=100 class='border recommend'  /></a> </p>
-              <div class="center">
-                <h2> {{video.title}}
-
-                </h2>
-                <p>
-                  <span><i>{{video.user.username}}</i></span>
-                  <span style='color:teal;'><i></br>{{video.views}} views</i></span>
-                </p>
-              </div>
-
+<div class="container-fluid">
+    <div class="row">
+        <!-- Main Video Column -->
+        <div class="col-lg-8">
+            <!-- Video Player -->
+            <div class="card mb-4">
+                <div class="card-body p-0">
+                    <video id="video-player" 
+                           class="video-js vjs-default-skin w-100" 
+                           controls 
+                           preload="auto" 
+                           data-setup='{"fluid": true, "responsive": true}'
+                           style="max-height: 500px;">
+                        <source src="{{ video.video.url }}" type="video/mp4">
+                        <p class="vjs-no-js">
+                            To view this video please enable JavaScript, and consider upgrading to a 
+                            <a href="https://videojs.com/html5-video-support/" target="_blank">web browser that supports HTML5 video.</a>
+                        </p>
+                    </video>
+                </div>
             </div>
-
-          </div>
-        </div>
-        {% endfor %}
-
-
-
-
-
-
-
-
-      </div>
-    </div>
-
-  </div>
-</div>
-
-<!--  DESCRIPTION -->
-
-<div class="container-2 description ">
-
-  <div class="container-1-box ">
-
-    <h3><span style='text-align: left;'>{{video.title}} </span> </h3>
-    <hr style='width:1080px;'>
-    <img src='{{ userprofile.picture.url }}' height=75 width=75 class='round'>
-
-    </img>
-    <p style='color:purple;' class='creator'><b>{{video.user.username}}</b></p>
-    <form method="POST">
-      {% csrf_token %}
-
-      <div class="ui labeled button right" tabindex="0" name='dislikeVideo' onclick="window.location='{% url 'dislike_video' video.id %}';">
-    </form>
-    <div class="ui purple button">
-      <i class="thumbs down
-   icon"></i> Dislike
-    </div>
-
-
-    <a class="ui basic purple left pointing label">
-      {{video.dislikes}}
-    </a>
-  </div>
-
-    <form method="POST">
-      {% csrf_token %}
-
-      <div class="ui labeled button right " tabindex="0" name='likeVideo' onclick="window.location='{% url 'like_video' video.id %}';">
-
-    </form>
-    <div class="ui teal button">
-      <i class="thumbs up
-   icon"></i> Like
-    </div>
-    <a class="ui basic teal left pointing label">
-      {{video.likes}}
-    </a>
-
-  </div>
-
-
-    <h4 style='color:teal;'><i>{{video.views}} views</i></h4>
-
-    <p>
-      {{video.description}}
-      <!-- Reply -->
-      <div class="ui form">
-        <div class="field">
-        </div>
-
-        <label><b>Add Your Comment!</b></label>
-        <form method="POST" action="{% url 'detail' video.id %}" enctype="multipart/form-data">
-          <textarea rows="4" name='textareaComment'></textarea>
-
-          {% csrf_token %}
-          <button class="ui labeled button right" tabindex="0" name='submitComment'>
-            <div class="ui teal button">
-              Submit
+            
+            <!-- Video Info -->
+            <div class="card mb-4">
+                <div class="card-body">
+                    <h3 class="card-title mb-3">{{ video.title }}</h3>
+                    
+                    <!-- Video Stats and Actions -->
+                    <div class="d-flex justify-content-between align-items-center mb-3">
+                        <div class="d-flex align-items-center">
+                            {% if userprofile.picture %}
+                                <img src="{{ userprofile.picture.url }}" class="rounded-circle me-3" style="width: 50px; height: 50px; object-fit: cover;" alt="User">
+                            {% else %}
+                                <div class="bg-secondary rounded-circle me-3 d-flex align-items-center justify-content-center text-white" style="width: 50px; height: 50px;">
+                                    {{ video.user.username|slice:":1"|upper }}
+                                </div>
+                            {% endif %}
+                            <div>
+                                <h6 class="mb-0">{{ video.user.username }}</h6>
+                                <small class="text-muted"><i class="bi bi-eye"></i> {{ video.views }} views</small>
+                            </div>
+                        </div>
+                        
+                        <!-- Like/Dislike Buttons -->
+                        {% if user.is_authenticated %}
+                        <div class="btn-group" role="group">
+                            <a href="{% url 'like_video' video.id %}" class="btn btn-outline-success">
+                                <i class="bi bi-hand-thumbs-up"></i> {{ video.likes }}
+                            </a>
+                            <a href="{% url 'dislike_video' video.id %}" class="btn btn-outline-danger">
+                                <i class="bi bi-hand-thumbs-down"></i> {{ video.dislikes }}
+                            </a>
+                        </div>
+                        {% else %}
+                        <a href="{% url 'login' %}" class="btn btn-primary">
+                            <i class="bi bi-box-arrow-in-right"></i> Login to Rate
+                        </a>
+                        {% endif %}
+                    </div>
+                    
+                    <!-- Description -->
+                    <div class="border-top pt-3">
+                        <p class="mb-0">{{ video.description }}</p>
+                    </div>
+                </div>
             </div>
-          </button>
-        </form>
-
-
-      </div>
-      <!-- COMMENTS -->
-
-
-
-
-
-        {% for query in queryset %}
-        {# Each "query" is a Queryset model object. #}
-
-      </br></br></br>
-      <div>
-        {% if query.picture %}
-          <img src='{{query.picture.url}}' height=60 width=60 class='round'>
-        {% else %}
-          <div style='height:60px; width:60px; background-color:#ccc; border-radius:50%; display:inline-block; text-align:center; line-height:60px; color:#666;'>👤</div>
-        {% endif %}
-        <p><b>{{query.user.username}}</b></p>
-        <p> {{ query.comment }}</p>
-
-        {% if user.is_authenticated %}
-        <form method="POST">
-          {% csrf_token %}
-
-          <div class="ui labeled button left" tabindex="0" onclick="window.location='{% url 'like_comment' query.id video.id %}';">
-
-
-        </form>
-        <div class="ui teal button">
-          <i class="thumbs up
-      icon"></i> Like
+            
+            <!-- Comments Section -->
+            <div class="card">
+                <div class="card-header">
+                    <h5 class="mb-0"><i class="bi bi-chat-dots"></i> Comments</h5>
+                </div>
+                <div class="card-body">
+                    <!-- Add Comment Form -->
+                    {% if user.is_authenticated %}
+                    <form method="POST" action="{% url 'detail' video.id %}" class="mb-4">
+                        {% csrf_token %}
+                        <div class="mb-3">
+                            <label for="textareaComment" class="form-label">Add your comment</label>
+                            <textarea class="form-control" id="textareaComment" name="textareaComment" rows="3" placeholder="Share your thoughts..."></textarea>
+                        </div>
+                        <button type="submit" name="submitComment" class="btn btn-primary">
+                            <i class="bi bi-send"></i> Submit Comment
+                        </button>
+                    </form>
+                    {% else %}
+                    <div class="alert alert-info mb-4">
+                        <a href="{% url 'login' %}" class="alert-link">Login</a> to add comments.
+                    </div>
+                    {% endif %}
+                    
+                    <!-- Comments List -->
+                    {% for comment in queryset %}
+                    <div class="border-bottom py-3">
+                        <div class="d-flex">
+                            {% if comment.picture %}
+                                <img src="{{ comment.picture.url }}" class="rounded-circle me-3" style="width: 40px; height: 40px; object-fit: cover;" alt="User">
+                            {% else %}
+                                <div class="bg-secondary rounded-circle me-3 d-flex align-items-center justify-content-center text-white" style="width: 40px; height: 40px; font-size: 14px;">
+                                    {{ comment.user.username|slice:":1"|upper }}
+                                </div>
+                            {% endif %}
+                            <div class="flex-grow-1">
+                                <h6 class="mb-1">{{ comment.user.username }}</h6>
+                                <p class="mb-2">{{ comment.comment }}</p>
+                                
+                                <!-- Comment Actions -->
+                                {% if user.is_authenticated %}
+                                <div class="btn-group btn-group-sm" role="group">
+                                    <a href="{% url 'like_comment' comment.id video.id %}" class="btn btn-outline-success btn-sm">
+                                        <i class="bi bi-hand-thumbs-up"></i> {{ comment.likes }}
+                                    </a>
+                                    <a href="{% url 'dislike_comment' comment.id video.id %}" class="btn btn-outline-danger btn-sm">
+                                        <i class="bi bi-hand-thumbs-down"></i> {{ comment.dislikes }}
+                                    </a>
+                                </div>
+                                {% endif %}
+                            </div>
+                        </div>
+                    </div>
+                    {% empty %}
+                    <div class="text-center text-muted py-4">
+                        <i class="bi bi-chat display-4"></i>
+                        <p class="mt-2">No comments yet. Be the first to comment!</p>
+                    </div>
+                    {% endfor %}
+                    
+                    <!-- Comments Pagination -->
+                    {% if queryset.has_other_pages %}
+                    <nav aria-label="Comments pagination" class="mt-4">
+                        <ul class="pagination justify-content-center">
+                            {% if queryset.has_previous %}
+                                <li class="page-item">
+                                    <a class="page-link" href="?page=1">First</a>
+                                </li>
+                                <li class="page-item">
+                                    <a class="page-link" href="?page={{ queryset.previous_page_number }}">Previous</a>
+                                </li>
+                            {% endif %}
+                            
+                            <li class="page-item active">
+                                <span class="page-link">Page {{ queryset.number }} of {{ queryset.paginator.num_pages }}</span>
+                            </li>
+                            
+                            {% if queryset.has_next %}
+                                <li class="page-item">
+                                    <a class="page-link" href="?page={{ queryset.next_page_number }}">Next</a>
+                                </li>
+                                <li class="page-item">
+                                    <a class="page-link" href="?page={{ queryset.paginator.num_pages }}">Last</a>
+                                </li>
+                            {% endif %}
+                        </ul>
+                    </nav>
+                    {% endif %}
+                </div>
+            </div>
         </div>
-        <a class="ui basic teal left pointing label">
-          {{query.likes}}
-        </a>
-
-
-      </div>
-      {% else %}
-      <button class="ui labeled button left" tabindex="0" name='loginComment' onclick="window.location='{% url 'login' %}';">
-        <div class="ui teal button">
-          Login To Rate
+        
+        <!-- Sidebar with Recommendations -->
+        <div class="col-lg-4">
+            <div class="card">
+                <div class="card-header">
+                    <h5 class="mb-0"><i class="bi bi-collection-play"></i> Recommended Videos</h5>
+                </div>
+                <div class="card-body p-0">
+                    {% for rec_video in recentvideos %}
+                    <div class="d-flex p-3 border-bottom">
+                        <a href="{% url 'detail' rec_video.id %}" class="text-decoration-none">
+                            <img src="{{ rec_video.thumbnail.url }}" class="rounded" style="width: 120px; height: 68px; object-fit: cover;" alt="{{ rec_video.title }}">
+                        </a>
+                        <div class="ms-3 flex-grow-1">
+                            <h6 class="mb-1">
+                                <a href="{% url 'detail' rec_video.id %}" class="text-decoration-none text-dark">
+                                    {{ rec_video.title|truncatewords:6 }}
+                                </a>
+                            </h6>
+                            <small class="text-muted d-block">{{ rec_video.user.username }}</small>
+                            <small class="text-muted">
+                                <i class="bi bi-eye"></i> {{ rec_video.views }} views
+                                <span class="ms-2"><i class="bi bi-hand-thumbs-up"></i> {{ rec_video.likes }}</span>
+                            </small>
+                        </div>
+                    </div>
+                    {% empty %}
+                    <div class="text-center p-4 text-muted">
+                        <i class="bi bi-collection display-4"></i>
+                        <p class="mt-2">No recommendations available</p>
+                    </div>
+                    {% endfor %}
+                </div>
+            </div>
         </div>
-      </button>
-      {%endif%}
-    {% if user.is_authenticated %}
-      <form method="POST" >
-        {% csrf_token %}
-        <div class="ui labeled button left" tabindex="0" onclick="window.location='{% url 'dislike_comment' query.id video.id %}';">
-      </form>
-      <div class="ui purple button">
-        <i class="thumbs down
-      icon"></i> Dislike
-      </div>
-      <a class="ui basic purple left pointing label">
-        {{query.dislikes}}
-      </a>
-  </div>
-  {% endif %}
-  <div class="ui labeled button right" tabindex="0">
-    <div class="ui gray button">
-      <i class="reply
-      icon"></i> Reply
     </div>
-
-  </div>
-
-
 </div>
 
-{% endfor %}
-
-
-
-
-
-</div>
-<div class="container-2-box">
-
-
-</div>
-</div>
-
-</div>
-
-<div class="pagination" style='margin-top:50px; margin-left:100px;'>
-
-  <span class="step-links">
-    {% if queryset.has_previous %}
-
-    <a href="?page=1">
-
-      <i class="step backward
-                 icon"></i> First
-
-    </a>
-    <a href="?page={{ queryset.previous_page_number }}">
-
-      <i class="reply
-             icon"></i> Previous
-    </a>
-    {% endif %}
-
-    <span class="current">
-      Page {{ queryset.number }} of {{ queryset.paginator.num_pages }}.
-    </span>
-
-    {% if queryset.has_next %}
-    <a href="?page={{ queryset.next_page_number }}">
-
-      <i class="play icon"></i> Next
-
-
-    </a>
-    <a href="?page={{ queryset.paginator.num_pages }}">
-
-      <i class="step forward
-             icon"></i> Last
-
-    </a>
-    {% endif %}
-  </span>
-</div>
+<!-- Video.js JavaScript -->
+<script src='https://vjs.zencdn.net/7.21.1/video.min.js'></script>
+<script>
+    // Initialize Video.js
+    var player = videojs('video-player', {
+        fluid: true,
+        responsive: true
+    });
+</script>
 
 {% load static %}
 <script src="{% static 'js/videoplayer.js' %}"></script>
-
-
-
-
-
-</body>
-
-</html>
-
-
 
 {% endblock %}

@@ -70,10 +70,8 @@ class UserProfile(models.Model):
         settings.AUTH_USER_MODEL, related_name="profile", on_delete=models.CASCADE
     )
     username = models.CharField(max_length=30, default="Anonymous")
-    picture = models.ImageField(
-        upload_to="images", default="media/images/defaultprofilepicture.png"
-    )
-    description = models.CharField(max_length=50)
+    picture = models.ImageField(upload_to="images", blank=True, null=True)
+    description = models.CharField(max_length=50, blank=True)
     videos = models.ManyToManyField(Video, related_name="user_videos")
 
     def __str__(self):

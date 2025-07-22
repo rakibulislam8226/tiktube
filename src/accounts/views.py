@@ -4,6 +4,7 @@ from django.contrib import auth
 from django.contrib.auth.models import User
 from videos.models import UserProfile
 from django.conf import settings
+from .forms import ProfileEditForm
 
 
 # Create your views here.
@@ -59,10 +60,6 @@ def signup_view(request):
                 userprofile.username = user.username
                 if request.FILES.get("picture"):
                     userprofile.picture = request.FILES.get("picture")
-                else:
-                    userprofile.picture = (
-                        settings.MEDIA_ROOT + "\images\defaultprofilepicture.png"
-                    )
 
                 userprofile.save()
 
@@ -75,3 +72,54 @@ def signup_view(request):
     else:
         # User wants to enter info
         return render(request, "accounts/signup.html")
+
+
+@login_required
+def profile_view(request):
+    try:
+        user_profile = UserProfile.objects.get(user=request.user)
+    except UserProfile.DoesNotExist:
+        # Create a profile if it doesn't exist
+        user_profile = UserProfile.objects.create(
+            user=request.user,
+            username=request.user.username,
+            description="",
+        )
+
+    return render(request, "accounts/profile.html", {"user_profile": user_profile})
+
+
+@login_required
+def profile_edit_view(request):
+    try:
+        user_profile = UserProfile.objects.get(user=request.user)
+    except UserProfile.DoesNotExist:
+        # Create a profile if it doesn't exist
+        user_profile = UserProfile.objects.create(
+            user=request.user,
+            username=request.user.username,
+            description="",
+        )
+
+    if request.method == "POST":
+        form = ProfileEditForm(
+            request.POST, request.FILES, instance=user_profile, user=request.user
+        )
+        if form.is_valid():
+            # Update user's first name and last name
+            request.user.first_name = form.cleaned_data.get("first_name", "")
+            request.user.last_name = form.cleaned_data.get("last_name", "")
+            request.user.save()
+
+            # Save the profile form
+            form.save()
+
+            return render(
+                request,
+                "accounts/profile_edit.html",
+                {"form": form, "success": "Profile updated successfully!"},
+            )
+    else:
+        form = ProfileEditForm(instance=user_profile, user=request.user)
+
+    return render(request, "accounts/profile_edit.html", {"form": form})
