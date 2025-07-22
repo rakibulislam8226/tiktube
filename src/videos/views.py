@@ -16,7 +16,6 @@ def upload_view(request):
     if request.GET.get("query"):
         return redirect("/videos/?query=" + request.GET.get("query"))
     if request.FILES.get("video"):
-        print("AT LEAST VIDEO IS WORKING")
         if (
             request.POST.get("title")
             and request.FILES.get("thumbnail")
@@ -77,7 +76,6 @@ def videos_view(request):
         else:
             user_ratings[tempquery.id] = None
 
-    print(likes_percent)
     return render(
         request,
         "videos/videos.html",
@@ -103,8 +101,6 @@ def like_comment(request, comment_id, video_id):
         comment.likes = comment.likes + 1
         comment.ratedUsers.add(request.user)
         comment.save()
-    else:
-        print("HAS ALREADY RATED THIS COMMENT!")
 
     return redirect("/videos/" + str(video_id) + "/")
 
@@ -123,8 +119,6 @@ def dislike_comment(request, comment_id, video_id):
         comment.dislikes = comment.dislikes + 1
         comment.ratedUsers.add(request.user)
         comment.save()
-    else:
-        print("HAS ALREADY RATED THIS COMMENT!")
 
     return redirect("/videos/" + str(video_id) + "/")
 
@@ -141,8 +135,6 @@ def like_video(request, video_id):
         video.likes = video.likes + 1
         video.ratedUsers.add(request.user)
         video.save()
-    else:
-        print("HAS ALREADY VOTED!")
 
     return redirect("/videos/" + str(video_id) + "/")
 
@@ -159,8 +151,6 @@ def dislike_video(request, video_id):
         video.dislikes = video.dislikes + 1
         video.ratedUsers.add(request.user)
         video.save()
-    else:
-        print("HAS ALREADY VOTED!")
 
     return redirect("/videos/" + str(video_id) + "/")
 
@@ -240,10 +230,7 @@ def dislike_video_from_list(request, video_id):
 
 
 def video_detail_view(request, video_id):
-    print("VIDEO DETAIL VIEW")
-
     video = get_object_or_404(Video, pk=video_id)
-    print("video:", video)
     videoUserName = video.user.username
     try:
         userprofile = UserProfile.objects.get(username=videoUserName)
