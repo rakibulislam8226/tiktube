@@ -1,4 +1,4 @@
-# TikTube - A Video Sharing Website by Django
+# TikTube - Online Video Sharing Website by Django
 
 A Django-powered video sharing platform with user authentication, video upload, and interactive features.
 
