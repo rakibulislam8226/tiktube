@@ -1,4 +1,4 @@
-# TukeTube - Django Video Website
+# TikTube - A Video Sharing Website by Django
 
 A Django-powered video sharing platform with user authentication, video upload, and interactive features.
 
@@ -6,7 +6,7 @@ A Django-powered video sharing platform with user authentication, video upload, 
 
 - Video upload and streaming
 - User authentication (login/signup)
--ike/Dislike functionality with toggle
+- Like/Dislike functionality with toggle
 - Comment system
 - Responsive design with Bootstrap
 - Video search functionality
@@ -27,7 +27,7 @@ A Django-powered video sharing platform with user authentication, video upload, 
 
 ### 1. Clone the Repository
 ```bash
-git clone <repository-url>
+git clone git@github.com:rakibulislam8226/tiktube.git
 ```
 
 ### 2. Create Virtual Environment
@@ -41,10 +41,15 @@ source venv/bin/activate  # On Windows: venv\Scripts\activate
 pip install -r requirements.txt
 ```
 
-### 4. Environment Configuration
+### 6. Go to src directory
 ```bash
-cp .env.example .env
-# Edit .env file with your configuration
+cd src
+```
+
+### 6. Migrate Database
+```bash
+python manage.py migrate
+```
 
 ### 6. Create Superuser (Optional)
 ```bash
